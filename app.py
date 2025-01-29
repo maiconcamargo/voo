@@ -34,5 +34,5 @@ def get_aircraft():
     data = get_aircraft_info(flight_number)
     return jsonify(data)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
+    
