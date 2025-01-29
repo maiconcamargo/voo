@@ -6,8 +6,7 @@ import time
 app = Flask(__name__)
 
 def get_aircraft_info(flight_number):
-    url = f"https://www.flightradar24.com/data/flights/{flight_number}"
-
+    url = f"https://www.airnavradar.com/data/flights/{flight_number}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
@@ -23,17 +22,14 @@ def get_aircraft_info(flight_number):
 
     html = response.text
 
-    # 🛩️ Extrai o Tail Number (Registro da Aeronave)
-    tail_match = re.search(r'/data/aircraft/([\w-]+)"', html)
+    # 🛩️ Extraindo o Tail Number
+    tail_match = re.search(r'/data/registration/([\w-]+)">', html)
     tail_number = tail_match.group(1) if tail_match else "Não encontrado"
 
-    # ✈️ Tentativas de Extração do Modelo (Para diferentes formatos)
-    model_match_1 = re.search(r'title="([^"]+)"\s*>F-', html)  # Caso 1
-   
+    # ✈️ Extraindo o Modelo do Avião
+    model_match = re.search(r'<div id="model" title="([^"]+)">', html)
+    aircraft_model = model_match.group(1) if model_match else "Não encontrado"
 
-    aircraft_model = (model_match_1.group(1) if model_match_1 else "Não encontrado")
-
-                       
     return {"tail_number": tail_number, "model": aircraft_model}
 
 @app.route('/get_aircraft', methods=['GET'])
