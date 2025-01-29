@@ -23,13 +23,18 @@ def get_aircraft_info(flight_number):
 
     html = response.text
 
-    # Extrai Tail Number
-    tail_match = re.search(r'/data/aircraft/([\w-]+)', html)
+    # 🛩️ Extrai o Tail Number (Registro da Aeronave)
+    tail_match = re.search(r'/data/aircraft/([\w-]+)"', html)
     tail_number = tail_match.group(1) if tail_match else "Não encontrado"
 
-    # Extrai Modelo
-    model_match = re.search(r'title="([^"]+)"\s*>F-', html)
-    aircraft_model = model_match.group(1) if model_match else "Não encontrado"
+    # ✈️ Tentativas de Extração do Modelo (Para diferentes formatos)
+    model_match_1 = re.search(r'title="([^"]+)"\s*>F-', html)  # Caso 1
+    model_match_2 = re.search(r'Aircraft:.*?<span>([^<]+)</span>', html)  # Caso 2
+    model_match_3 = re.search(r'"aircraftType":"([^"]+)"', html)  # Caso 3
+
+    aircraft_model = (model_match_1.group(1) if model_match_1 else 
+                      model_match_2.group(1) if model_match_2 else 
+                      model_match_3.group(1) if model_match_3 else "Não encontrado")
 
     return {"tail_number": tail_number, "model": aircraft_model}
 
@@ -44,3 +49,4 @@ def get_aircraft():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
+
