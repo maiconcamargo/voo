@@ -29,13 +29,11 @@ def get_aircraft_info(flight_number):
 
     # ✈️ Tentativas de Extração do Modelo (Para diferentes formatos)
     model_match_1 = re.search(r'title="([^"]+)"\s*>F-', html)  # Caso 1
-    model_match_2 = re.search(r'Aircraft:.*?<span>([^<]+)</span>', html)  # Caso 2
-    model_match_3 = re.search(r'"aircraftType":"([^"]+)"', html)  # Caso 3
+   
 
-    aircraft_model = (model_match_1.group(1) if model_match_1 else 
-                      model_match_2.group(1) if model_match_2 else 
-                      model_match_3.group(1) if model_match_3 else "Não encontrado")
+    aircraft_model = (model_match_1.group(1) if model_match_1 else "Não encontrado")
 
+                       
     return {"tail_number": tail_number, "model": aircraft_model}
 
 @app.route('/get_aircraft', methods=['GET'])
