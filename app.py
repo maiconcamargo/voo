@@ -21,4 +21,4 @@ def get_aircraft_info(flight_number):
     return {"tail_number": tail_number, "model": aircraft_model}
 
 # ✅ Teste com um voo real
-print(get_aircraft_info("EK209"))
+print(get_aircraft_info)
